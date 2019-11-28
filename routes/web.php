@@ -12,6 +12,9 @@
 */
 
 // use Symfony\Component\Routing\Route;
+
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ProdukController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -28,4 +31,7 @@ Route::get('/home', 'dynamicView@home');
 Route::get('/home/about', 'dynamicView@about');
 Route::get('/home/contact', 'dynamicView@contact');
 
-Route::get('/tambah', 'ProdukAddCOntroller@tambahKatalog');
+Route::get('/produk/tambah', 'ProdukCOntroller@tambahKatalog');
+Route::post('/produk/simpan', 'ProdukController@addProducts');
+Route::get('/produk/update', 'ProdukController@updateProduct');
+Route::get('/produk/hapus');
