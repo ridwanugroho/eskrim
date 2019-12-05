@@ -75,6 +75,7 @@ class ProdukController extends Controller
         return view('admin/editProduk', ['dataEdit' => $produk]);
     }
 
+
     public function editProduk_simpan($id, Request $req){
         $errMsgs = [
             'required' => ':attribute Wajib diisi!',
@@ -129,10 +130,18 @@ class ProdukController extends Controller
         return view('admin/produkTerhapus', ['produk' => $produk]);
     }
 
-    
+
     public function produkRestore($id){
         $produk = Produk::onlyTrashed()->where('ID', $id);
         $produk->restore();
+
+        return redirect('produk/terhapus');
+    }
+
+
+    public function hapusProdukPermanen($id){
+        $produk = Produk::onlyTrashed()->where('id', $id);
+        $produk->forceDelete();
 
         return redirect('produk/terhapus');
     }

@@ -38,3 +38,4 @@ Route::get('/produk/edit/{id}', 'ProdukController@editProduct');
 Route::get('/produk/hapus/{id}', 'ProdukController@hapusProduk');
 Route::get('/produk/terhapus', 'ProdukController@produkTerhapus');
 Route::get('/produk/restore/{id}', 'ProdukController@produkRestore');
+Route::get('/produk/hapus_permanen/{id}', 'ProdukController@hapusProdukPermanen');

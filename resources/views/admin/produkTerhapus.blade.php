@@ -9,10 +9,9 @@
 			var datas = {!! json_encode($produk) !!};
 			console.log(datas);
 			if(datas.length == 0){
-				console.log("data kosong");
 				window.setTimeout(function(){
 					window.location.href = "/produk";
-				}, 3000);
+				}, 2000);
 			}
 		});
 	</script>
