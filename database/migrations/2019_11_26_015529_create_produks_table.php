@@ -22,7 +22,7 @@ class CreateProduksTable extends Migration
             $table->integer ('stock');
             $table->integer ('sold');
             $table->string  ('po_status');
-            $table->integer ('po_duration')->nullable();
+            $table->integer ('po_duration');
         });
     }
 

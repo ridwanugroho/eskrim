@@ -12,9 +12,20 @@ class ProdukController extends Controller
 
     public function index(){
         $produk = Produk::all();
+        
+        for($i=0; $i<count($produk); $i++){
+            if($produk[$i]->type == 0)
+                $produk[$i]->type = 'Buket bunga';
+            
+            elseif($produk[$i]->type == 1)
+                $produk[$i]->type = 'Buket snack';
+
+            elseif($produk[$i]->type == 2)
+                $produk[$i]->type = 'Buket flanel';
+        }
+
         // error_log($produk);
-        return $produk;
-        // return view('produk', ['produk' => $produk]);
+        return view('admin/produkView', ['produk' =>$produk]);
     }
 
 
@@ -25,11 +36,11 @@ class ProdukController extends Controller
 
 
     public function tambahKatalog(){
-        return view('addProduct');
+        return view('admin/addProduct');
     }
 
 
-    public function addProducts(Request $req){
+    public function addProducts($id = NULL, Request $req){
         $errMsgs = [
             'required' => ':attribute Wajib diisi!',
             'numeric'  => ':attribute Hanya angka!'
@@ -44,10 +55,6 @@ class ProdukController extends Controller
             'po_duration'   => 'numeric'
         ], $errMsgs);
 
-        $po_duration = 0;
-        if($req->po_duration != null)
-            $po_duration = $req->po_duration;
-
         Produk::create([
             'type'          => $req->type,
             'name'          => $req->name,
@@ -55,25 +62,78 @@ class ProdukController extends Controller
             'stock'         => $req->stock,
             'sold'          => 0,
             'po_status'     => $req->po_status,
-            'po_duration'   =>  $po_duration
+            'po_duration'   =>  $req->po_duration
         ]);
 
         return redirect('/produk');
     }
 
 
-    public function updateProduct(Request $req){
-        DB::table('produk')->where('id', 6)->update([
-            'updated_at'    => Carbon::now()->toDateTimeString(),
-            'type'          => 0,
-            'name'          => 'mawar 10',
-            'code'          => 'mw010',
-            'stock'         => 3,
-            'sold'          => 5,
-            'po_status'     => 'none',
-            'po_duration'   => 0
-        ]);
+    public function editProduct($id){
+        $produk = Produk::find($id);
+        // error_log($produk);
+        return view('admin/editProduk', ['dataEdit' => $produk]);
+    }
+
+    public function editProduk_simpan($id, Request $req){
+        $errMsgs = [
+            'required' => ':attribute Wajib diisi!',
+            'numeric'  => ':attribute Hanya angka!'
+        ];
+
+        $this->validate($req, [
+            'type'          => 'required|numeric',
+            'name'          => 'required',
+            'code'          => 'required',
+            'stock'         => 'required|numeric',
+            'po_status'     => 'required',
+            'po_duration'   => 'numeric'
+        ], $errMsgs);
+
+        $produk = Produk::find($id);
+        $produk->type          = $req->type;
+        $produk->name          = $req->name;
+        $produk->code          = $req->code;
+        $produk->stock         = $req->stock;
+        $produk->sold          = $req->sold;
+        $produk->po_status     = $req->po_status;
+        $produk->po_duration   = $req->po_duration;
+        $produk->save();
 
         return redirect('/produk');
+    }
+
+
+    public function hapusProduk($id){
+        $produk = Produk::find($id);
+        $produk->delete();
+
+        return redirect('/produk');
+    }
+
+
+    public function produkTerhapus(){
+        $produk = Produk::onlyTrashed()->get();
+
+        for($i=0; $i<count($produk); $i++){
+            if($produk[$i]->type == 0)
+                $produk[$i]->type = 'Buket bunga';
+            
+            elseif($produk[$i]->type == 1)
+                $produk[$i]->type = 'Buket snack';
+
+            elseif($produk[$i]->type == 2)
+                $produk[$i]->type = 'Buket flanel';
+        }
+
+        return view('admin/produkTerhapus', ['produk' => $produk]);
+    }
+
+    
+    public function produkRestore($id){
+        $produk = Produk::onlyTrashed()->where('ID', $id);
+        $produk->restore();
+
+        return redirect('produk/terhapus');
     }
 }

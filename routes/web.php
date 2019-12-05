@@ -31,7 +31,10 @@ Route::get('/home', 'dynamicView@home');
 Route::get('/home/about', 'dynamicView@about');
 Route::get('/home/contact', 'dynamicView@contact');
 
-Route::get('/produk/tambah', 'ProdukCOntroller@tambahKatalog');
+Route::get('/produk/tambah/', 'ProdukCOntroller@tambahKatalog');
 Route::post('/produk/simpan', 'ProdukController@addProducts');
-Route::get('/produk/update', 'ProdukController@updateProduct');
-Route::get('/produk/hapus');
+Route::post('/produk/simpan/{id}', 'ProdukController@editProduk_simpan');
+Route::get('/produk/edit/{id}', 'ProdukController@editProduct');
+Route::get('/produk/hapus/{id}', 'ProdukController@hapusProduk');
+Route::get('/produk/terhapus', 'ProdukController@produkTerhapus');
+Route::get('/produk/restore/{id}', 'ProdukController@produkRestore');
